@@ -1,12 +1,8 @@
 # CirnoBot
 
-## How to start
+Baka!
 
-1. generate project using `nb create` .
-2. create your plugin using `nb plugin create` .
-3. writing your plugins under `src/plugins` folder.
-4. run your bot using `nb run --reload` .
+## Requirements
 
-## Documentation
-
-See [Docs](https://v2.nonebot.dev/)
+- Python 3.10 (Recommended)
+- SQLite (should have been included in Python 3.10)

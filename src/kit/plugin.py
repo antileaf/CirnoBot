@@ -1,0 +1,1 @@
+from nonebot.plugin import PluginMetadata as metadata
