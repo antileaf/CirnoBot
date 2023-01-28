@@ -9,16 +9,17 @@ from typing import Dict, List, Tuple, Set, Union
 from .my_config import Config
 
 from ... import kit
-from ...kit import message as mskit
+from ...kit.nb import message as mskit
 
 
 global_config = nonebot.get_driver().config
 config = Config.parse_obj(global_config)
 
-__plugin_meta__ = kit.plugin.metadata(
+__plugin_meta__ = kit.nb.plugin.metadata(
     name = '涩图',
     description = '随机获得一张二次元美图',
-    usage = ''
+    usage = '.setu',
+    extra = {'alias' : {'涩图', '色图', '美图', '图'}}
 )
 
 
@@ -27,7 +28,7 @@ last_time : Dict[int, datetime.datetime] = dict()
 setu = on_command('setu', aliases = {'涩图', '色图', '美图', '图'}, priority = config.priority)
 
 @setu.handle()
-async def setu_handler(event : Union[mskit.GroupMessageEvent, mskit.PrivateMessageEvent], args : mskit.Message = mskit.params.CommandArg()):
+async def setu_handler(event : Union[mskit.GroupMessageEvent, mskit.PrivateMessageEvent]):
     group_id = event.group_id if isinstance(event, mskit.GroupMessageEvent) else 0
     user_id = event.user_id
     

@@ -8,13 +8,13 @@ from typing import Dict, List, Tuple, Set, Union
 from .my_config import Config
 
 from ... import kit
-from ...kit import message as mskit
+from ...kit.nb import message as mskit
 
 
 global_config = nonebot.get_driver().config
 config = Config.parse_obj(global_config)
 
-__plugin_meta__ = kit.plugin.metadata(
+__plugin_meta__ = kit.nb.plugin.metadata(
     name = '帮助',
     description = '获取插件描述与用法',
     usage = f'%help 插件 id（注意不是中文名）以查询插件帮助，或者 %help list 以查询所有可用的帮助'
@@ -37,6 +37,8 @@ def generate_help_message(plugin : Plugin) -> str:
             message += f'\n描述：{md.description}'
         if md.usage:
             message += f'\n用法：{md.usage}'
+        if 'alias' in md.extra:
+            message += '\n别名：{}'.format(' '.join(list(md.extra['alias'])))
     
     else:
         message = f'插件 \"{message}\" 未提供帮助信息'
@@ -47,7 +49,7 @@ def generate_help_message(plugin : Plugin) -> str:
 cirno_help = on_command('help', aliases = {'帮助', 'man'})
 
 @cirno_help.handle()
-async def cirno_help_handler(matcher : kit.matcher.Matcher, event : Union[mskit.GroupMessageEvent, mskit.PrivateMessageEvent], args : mskit.Message = mskit.params.CommandArg()):
+async def cirno_help_handler(matcher : kit.nb.matcher.Matcher, event : Union[mskit.GroupMessageEvent, mskit.PrivateMessageEvent], args : mskit.Message = mskit.params.CommandArg()):
     group_id = event.group_id if isinstance(event, mskit.GroupMessageEvent) else 0
     user_id = event.user_id
 

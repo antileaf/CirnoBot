@@ -5,7 +5,7 @@ from nonebot import get_driver, on_message
 from typing import Dict, List, Tuple
 
 from ... import kit
-from ...kit import message as mskit
+from ...kit.nb import message as mskit
 
 from .my_config import Config
 
@@ -13,7 +13,7 @@ from .my_config import Config
 global_config = get_driver().config
 config = Config.parse_obj(global_config)
 
-__plugin_meta__ = kit.plugin.metadata(
+__plugin_meta__ = kit.nb.plugin.metadata(
     name = '复读机',
     description = '',
     usage = f'在复读次数到达第 {config.repeat_times} 次时，加入复读。'
@@ -27,7 +27,7 @@ last_message : Dict[int, str] = dict()
 repeat_count : Dict[int, int] = dict()
 
 @repeater.handle()
-async def repeater_handler(bot : kit.Bot, event : mskit.GroupMessageEvent):
+async def repeater_handler(bot : kit.nb.Bot, event : mskit.GroupMessageEvent):
     group_id, user_id = event.group_id, event.user_id
     
     if not group_id in last_message:
