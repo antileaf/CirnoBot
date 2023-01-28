@@ -17,7 +17,11 @@ config = Config.parse_obj(global_config)
 __plugin_meta__ = kit.nb.plugin.metadata(
     name = '帮助',
     description = '获取插件描述与用法',
-    usage = f'%help 插件 id（注意不是中文名）以查询插件帮助，或者 %help list 以查询所有可用的帮助'
+    usage = f'.help 插件 id 或命令以查询插件帮助，或者 .help list 以查询所有可用的帮助',
+    extra = {
+        'command': 'help',
+        'alias' : {'帮助', 'man', 'manual'}
+    }
 )
 
 
@@ -46,7 +50,33 @@ def generate_help_message(plugin : Plugin) -> str:
     return message
 
 
-cirno_help = on_command('help', aliases = {'帮助', 'man'})
+def search_help_messages(key : str) -> Tuple[bool, str]:
+    results : List[Plugin] = []
+
+    for plugin in nonebot.get_loaded_plugins():
+        flag = False
+        if plugin.name == key:
+            flag = True
+        elif plugin.metadata:
+            if plugin.metadata.name == key:
+                flag = True
+            elif 'command' in plugin.metadata.extra and key == plugin.metadata.extra['command']:
+                flag = True
+            elif 'alias' in plugin.metadata.extra and key in plugin.metadata.extra['alias']:
+                flag = True
+        
+        if flag:
+            results.append(plugin)
+    
+    if len(results) == 0:
+        return False, f'未找到 \"{key}\" 的帮助信息。\n可用的帮助：\n' + generate_availiable_helps()
+    elif len(results) == 1:
+        return True, generate_help_message(results[0])
+    else:
+        return True, f'找到 {len(results)} 条结果：\n\n' + '\n\n'.join([generate_help_message(plugin) for plugin in results])
+
+
+cirno_help = on_command('help', aliases = __plugin_meta__.extra['alias'])
 
 @cirno_help.handle()
 async def cirno_help_handler(matcher : kit.nb.matcher.Matcher, event : Union[mskit.GroupMessageEvent, mskit.PrivateMessageEvent], args : mskit.Message = mskit.params.CommandArg()):
@@ -61,14 +91,12 @@ async def cirno_help_handler(matcher : kit.nb.matcher.Matcher, event : Union[msk
         if name == 'list':
             await mskit.send_reply(message = '可用的帮助：\n' + generate_availiable_helps(), event = event)
         else:
-            plugin = nonebot.get_plugin(name)
-            if not plugin:
-                await mskit.send_reply(message = f'没有找到插件 \"{name}\"。\n可用的帮助：\n' + generate_availiable_helps(), event = event)
-            else:
-                await mskit.send_reply(message = generate_help_message(plugin), event = event)
+            flag, msg = search_help_messages(name)
+
+            await mskit.send_reply(message = ('\n' if flag else '') + msg, event = event)
 
     else:
         await mskit.send_reply(message = '用法：' + __plugin_meta__.usage, event = event)
     
-    # !!! block !!!
-    matcher.stop_propagation()
+    # want to block ?
+    # matcher.stop_propagation()

@@ -22,7 +22,10 @@ __plugin_meta__ = kit.nb.plugin.metadata(
     name = '历史上的今天',
     description = '随机获得一张二次元美图',
     usage = '.today 历史上的今天\n.today subscribe 订阅每日推送\n.today unsubscribe 取消订阅\n.today check 检查订阅状态',
-    extra = {'alias' : {'历史上的今天'}}
+    extra = {
+        'command' : 'today',
+        'alias' : {'历史上的今天'}
+    }
 )
 
 # 以下部分复制于 AquamarineCyan/nonebot-plugin-today-in-history、

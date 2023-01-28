@@ -18,8 +18,11 @@ config = Config.parse_obj(global_config)
 __plugin_meta__ = kit.nb.plugin.metadata(
     name = '罪恶装备对位胜率',
     description = '查询各个角色的对位胜率',
-    usage = '.matchup 角色1 角色2：查询角色1对角色2的胜率\n.matchup 角色：查询角色对位所有角色的胜率\n.matchup list：查询角色列表',
-    extra = {'alias' : {'ggm', 'gg'}}
+    usage = '.gg 角色1 角色2：查询角色1对角色2的胜率\n.gg 角色：查询角色对位所有角色的胜率\n.gg list：查询角色列表',
+    extra = {
+        'command' : 'gg',
+        'alias' : {'ggm', 'matchup', 'gg_matchup'}
+    }
 )
 
 

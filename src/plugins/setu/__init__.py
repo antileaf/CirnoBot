@@ -19,7 +19,10 @@ __plugin_meta__ = kit.nb.plugin.metadata(
     name = '涩图',
     description = '随机获得一张二次元美图',
     usage = '.setu',
-    extra = {'alias' : {'涩图', '色图', '美图', '图'}}
+    extra = {
+        'command' : 'setu',
+        'alias' : {'涩图', '色图', '美图', '图'}
+    }
 )
 
 
