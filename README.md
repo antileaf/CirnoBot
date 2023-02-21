@@ -17,3 +17,5 @@
 	- sqlite3 (通常在 Python 3.10 中自带)
 	- lxml, pandas
 - SQLite3
+- go-cqhttp
+  - 其他的也可以，但是我不会用
