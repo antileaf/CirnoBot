@@ -14,11 +14,13 @@ if ! dpkg -s python3-venv >/dev/null 2>&1; then
 fi
 
 # Get the Python3 version number
-cirnobot_python3_version=$(python3 -c "import platform; print(platform.python_version())")
+cirnobot_python3_version=$(python3 --version | awk '{print $2}')
+
+echo "Creating virtual environment with Python $cirnobot_python3_version..."
 
 # Check if the version is 3.10
-if [[ $version != "3.10"* && $version < "3.10" ]]; then
-  echo >&2 "Warning: Python3 version is lower than 3.10. This may cause some unexpected errors."
+if [[ "$(echo $cirnobot_python3_version | tr '.' ' ' | awk '{print $2}')" -lt "10" ]]; then
+  echo >&2 "Warning: Your Python3 version is $cirnobot_python3_version, which is lower than 3.10. This may cause some unexpected errors."
 fi
 
 # Define the name of the virtual environment
