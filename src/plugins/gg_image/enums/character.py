@@ -163,10 +163,3 @@ two_letter_name_tbl : Dict[Character, List[str]] = {
     Character.Bridget : ['br', 'bi'],
     Character.Sin : ['si']
 }
-
-
-aliases_tbl : Dict[Character, Set[str]] = {
-    Character.Error : set(),
-    Character.Sol : {'Sol Badguy', 'Sol'},
-    Character.Ky : {'Ky Kiske', 'Ky'},
-}

@@ -1,11 +1,12 @@
-from typing import List, Tuple, Set, Union
+from typing import List, Tuple, Set, Union, Optional
 
 from ... import kit
 
 class TIHSubscribe:
-    def __init__(self, name : str):
+    def __init__(self, name : Optional[str] = None):
         self.name = name
-        self.db = kit.db.subscribe.Subscribe(name)
+        if self.name:
+            self.db = kit.db.subscribe.Subscribe(self.name)
     
     def add(self, id : int):
         self.db.add((id, ''))
@@ -19,8 +20,17 @@ class TIHSubscribe:
     def all(self) -> List[int]:
         return [id for id, _, _ in self.db.query({'content' : self.db.ANY_CONTENT})]
 
-group = TIHSubscribe('today_in_history_group')
-user = TIHSubscribe('today_in_history_user')
+
+group = TIHSubscribe()
+user = TIHSubscribe()
+
+
+@kit.nb.driver.on_startup
+async def init_subscribe():
+    global group, user
+    group = TIHSubscribe('today_in_history_group')
+    user = TIHSubscribe('today_in_history_user')
+    
 
 def subscribe(group_id : int = 0, user_id : int = 0) -> Tuple[bool, str]:
     if group_id and user_id:
