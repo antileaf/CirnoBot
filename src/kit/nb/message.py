@@ -13,6 +13,8 @@ import nonebot.params as params
 
 from typing import List, Tuple, Set, Union
 
+def at(user_id : int) -> MessageSegment:
+    return ms.at(user_id)
 
 async def is_group_message(event : Event) -> bool:
     return isinstance(event, GroupMessageEvent)
@@ -30,7 +32,7 @@ async def is_group_message(event : Event) -> bool:
     
 
 async def send_reply(message : Union[Message, MessageSegment, str], event : Event, at : bool = True):
-    if at and isinstance(event, GroupMessageEvent):
+    if at and isinstance(event, GroupMessageEvent) and event.user_id != 80000000:
         message = ms.at(event.user_id) + ' ' + message
 
     await nonebot.get_bot().send(event = event, message = message)
